@@ -1,113 +1,87 @@
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var strength = "0";
+
+  String updateStrength(String strength) {
+    setState(() {
+      strength = calculateStrength(strength);
+    });
+    return strength;
+  }
+
+  String calculateStrength(strength) {
+    int value = 0;
+    int digit = 0;
+    int upperCase = 0;
+    int lowerCase = 0;
+    int special = 0;
+    int len = strength.length;
+    for (int i = 0; i < len; i++) {
+      int currASCIIvalue = strength.codeUnitAt(i);
+      if (currASCIIvalue > 47 && currASCIIvalue < 58) {
+        digit++;
+      } else if (currASCIIvalue > 64 && currASCIIvalue < 91) {
+        upperCase++;
+      } else if (currASCIIvalue > 94 && currASCIIvalue < 121) {
+        lowerCase++;
+      } else if ((currASCIIvalue > 32 && currASCIIvalue < 48) ||
+          (currASCIIvalue > 57 && currASCIIvalue < 65) ||
+          (currASCIIvalue > 90 && currASCIIvalue < 97) ||
+          (currASCIIvalue > 122 && currASCIIvalue < 127)) {
+        special++;
+      }
+    }
+    if (digit > 0) value++;
+    if (upperCase > 0) value++;
+    if (lowerCase > 0) value++;
+    if (special > 0) value++;
+    if (len > 9) value++;
+
+    double result = (value * 100) / 5;
+    return result.toString();
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      title: 'Password Strength',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Check Strength"),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Card(elevation: 10),
+              Text("Welcome User"),
+              Card(elevation: 10),
+              Card(elevation: 10),
+              Text("Strength : $strength %"),
+              TextField(
+                decoration: InputDecoration(labelText: 'Enter Password'),
+                onSubmitted: (val) {
+                  strength = updateStrength(val);
+                  print(val);
+                },
+              ),
+              Card(
+                elevation: 10,
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
