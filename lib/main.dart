@@ -1,5 +1,4 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -56,24 +55,34 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Password Strength',
+      theme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Check Strength"),
+          title: Text("How Secure is Your Password ?",
+              style: TextStyle(fontSize: 30)),
         ),
         body: Center(
           child: Column(
             children: <Widget>[
               Card(elevation: 10),
-              Text("Welcome User"),
+              Text(
+                "Test your Password Strength",
+                style: TextStyle(fontSize: 20),
+              ),
               Card(elevation: 10),
-              Card(elevation: 10),
-              Text("Strength : $strength %"),
               TextField(
                 decoration: InputDecoration(labelText: 'Enter Password'),
                 onSubmitted: (val) {
                   strength = updateStrength(val);
                   print(val);
                 },
+              ),
+              Card(elevation: 10),
+              Text(
+                "Strength : $strength %",
+                style: TextStyle(
+                  fontSize: 30,
+                ),
               ),
               Card(
                 elevation: 10,
